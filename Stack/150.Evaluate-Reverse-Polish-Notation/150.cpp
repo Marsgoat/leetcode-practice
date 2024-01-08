@@ -8,29 +8,25 @@ class Solution {
  public:
   int evalRPN(vector<string>& tokens) {
     stack<int> s;
-    vector<string> operators = {"+", "-", "*", "/"};
+    unordered_map<string, function<int(int, int)>> operators = {
+        {"+", [](int a, int b) { return a + b; }},
+        {"-", [](int a, int b) { return a - b; }},
+        {"*", [](int a, int b) { return a * b; }},
+        {"/", [](int a, int b) { return a / b; }}};
 
-    for (auto token : tokens) {
-      if (find(operators.begin(), operators.end(), token) != operators.end()) {
-        int num2 = s.top();
+    for (string token : tokens) {
+      if (operators.count(token)) {
+        int b = s.top();
         s.pop();
-        int num1 = s.top();
+        int a = s.top();
         s.pop();
-        s.push(calculate(num1, num2, token));
+        s.push(operators[token](a, b));
       } else {
         s.push(stoi(token));
       }
     }
 
     return s.top();
-  }
-
-  int calculate(int num1, int num2, string op) {
-    if (op == "+") return num1 + num2;
-    if (op == "-") return num1 - num2;
-    if (op == "*") return num1 * num2;
-    if (op == "/") return num1 / num2;
-    return 0;
   }
 };
 
