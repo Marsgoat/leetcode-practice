@@ -14,22 +14,12 @@ class Solution {
     stack<int> Stack;
 
     for (int i = 0; i < n; i++) {
-      while (arr[Stack.top()] > arr[i]) {
+      while (!Stack.empty() && arr[Stack.top()] > arr[i]) {
         nextSmaller[Stack.top()] = i;
         Stack.pop();
       }
 
-      Stack.push(i);
-    }
-
-    while (!Stack.empty()) Stack.pop();
-
-    for (int i = n - 1; i >= 0; i++) {
-      while (arr[Stack.top()] >= arr[i]) {
-        prevSmaller[Stack.top()] = i;
-        Stack.pop();
-      }
-
+      if (!Stack.empty()) prevSmaller[i] = Stack.top();
       Stack.push(i);
     }
 
@@ -38,7 +28,7 @@ class Solution {
     for (int i = 0; i < n; i++) {
       int a = prevSmaller[i];
       int b = nextSmaller[i];
-      long num = arr[i] * (i - a) % MOD * (b - i) % MOD;
+      long long num = arr[i] * (i - a) % MOD * (b - i) % MOD;
       result = (result + num) % MOD;
     }
 
