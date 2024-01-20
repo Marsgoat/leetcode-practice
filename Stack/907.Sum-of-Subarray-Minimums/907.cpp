@@ -35,3 +35,9 @@ class Solution {
     return result;
   }
 };
+
+int main() {
+  Solution solution;
+  vector<int> arr = {3, 1, 2, 4};
+  cout << solution.sumSubarrayMins(arr) << endl;
+}
