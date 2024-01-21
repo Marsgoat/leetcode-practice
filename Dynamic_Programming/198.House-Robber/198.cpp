@@ -21,21 +21,17 @@ class Solution {
 
   // space : O(1)
   int rob2(vector<int>& nums) {
-    int n = nums.size();
-    if (n == 1) return nums[0];
-
-    int prev = nums[0];
-    int curr = max(nums[0], nums[1]);
-
-    for (int i = 2; i < n; i++) {
+    int prev = 0;
+    int curr = 0;
+    for (int num : nums) {
       int temp = curr;
-      curr = max(curr, prev + nums[i]);
+      curr = max(curr, prev + num);
       prev = temp;
     }
 
     return curr;
   }
-};
+}
 
 int main() {
   Solution solution;
