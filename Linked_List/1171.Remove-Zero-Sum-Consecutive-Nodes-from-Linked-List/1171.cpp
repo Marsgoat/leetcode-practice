@@ -34,6 +34,31 @@ class Solution {
 
     return front->next;
   }
+
+  // prefix sum + hash map
+  ListNode* removeZeroSumSublists2(ListNode* head) {
+    ListNode* front = new ListNode(0, head);
+    ListNode* current = front;
+    int prefixSum = 0;
+    unordered_map<int, ListNode*> map;
+
+    while (current != nullptr) {
+      prefixSum += current->val;
+      map[prefixSum] = current;
+      current = current->next;
+    }
+
+    prefixSum = 0;
+    current = front;
+
+    while (current != nullptr) {
+      prefixSum += current->val;
+      current->next = map[prefixSum]->next;
+      current = current->next;
+    }
+
+    return front->next;
+  }
 };
 
 int main() {
