@@ -9,9 +9,12 @@ class Solution {
     int maxMoney = 0;
     int minPrice = prices[0];
 
-    for (int price : prices) {
-      minPrice = min(minPrice, price);
-      maxMoney = max(maxMoney, price - minPrice);
+    for (int i = 1; i < prices.size(); i++) {
+      if (prices[i] > prices[i - 1]) {
+        maxMoney = max(maxMoney, prices[i] - minPrice);
+      } else {
+        minPrice = min(minPrice, prices[i]);
+      }
     }
 
     return maxMoney;
