@@ -8,11 +8,11 @@ class Solution {
   int minDays(vector<int>& bloomDay, int m, int k) {
     if ((long long)m * k > bloomDay.size()) return -1;
 
-    long long left = INT_MAX;
-    long long right = INT_MIN;
+    int left = INT_MAX;
+    int right = INT_MIN;
     for (int day : bloomDay) {
-      left = min(left, (long long)day);
-      right = max(right, (long long)day);
+      left = min(left, day);
+      right = max(right, day);
     }
 
     while (left < right) {
