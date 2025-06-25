@@ -15,55 +15,34 @@ struct TreeNode {
 class Solution {
  public:
   string getDirections(TreeNode* root, int startValue, int destValue) {
-    vector<char> startPath, destPath;
-    dfs(root, startValue, destValue, {}, startPath, destPath);
+    string pathToStart, pathToDest;
+    dfs(root, startValue, pathToStart);
+    dfs(root, destValue, pathToDest);
 
-    // 找出共同 prefix 長度
-    int i = 0, common = min(startPath.size(), destPath.size());
-    while (i < common && startPath[i] == destPath[i]) {
+    // 找 LCA
+    int i = 0;
+    while (i < pathToStart.size() && i < pathToDest.size() &&
+           pathToStart[i] == pathToDest[i]) {
       ++i;
     }
 
-    // 從 start node 到 LCA 要回傳 "U"
-    string result(startPath.size() - i, 'U');
-
-    // 從 LCA 到 dest node
-    for (int j = i; j < destPath.size(); ++j) {
-      result += destPath[j];
-    }
-
+    string result(pathToStart.size() - i, 'U');  // 向上
+    result += pathToDest.substr(i);              // 再往下
     return result;
   }
 
  private:
-  // currentPath 是遞迴時帶入的路徑
-  bool dfs(TreeNode* node, int startValue, int destValue,
-           vector<char> currentPath, vector<char>& startPath,
-           vector<char>& destPath) {
+  bool dfs(TreeNode* node, int target, string& path) {
     if (!node) return false;
+    if (node->val == target) return true;
 
-    if (node->val == startValue) {
-      startPath = currentPath;
-    }
-    if (node->val == destValue) {
-      destPath = currentPath;
-    }
+    path.push_back('L');
+    if (dfs(node->left, target, path)) return true;
+    path.pop_back();
 
-    // 若兩個路徑都找到就停止搜尋
-    if (!startPath.empty() && !destPath.empty()) {
-      return true;
-    }
-
-    currentPath.push_back('L');
-    if (dfs(node->left, startValue, destValue, currentPath, startPath,
-            destPath)) {
-      return true;
-    }
-    currentPath.back() = 'R';
-    if (dfs(node->right, startValue, destValue, currentPath, startPath,
-            destPath)) {
-      return true;
-    }
+    path.push_back('R');
+    if (dfs(node->right, target, path)) return true;
+    path.pop_back();
 
     return false;
   }
